@@ -1,5 +1,8 @@
-// To be part of ECMAScript.next
+//---------- Preparing for ECMAScript.next
+
 if (!Object.getOwnPropertyDescriptors) {
+    /**
+     */
     Object.getOwnPropertyDescriptors = function (obj) {
         return Object.getOwnPropertyNames(obj).map(function(propName) {
             return Object.getOwnPropertyDescriptor(source, propName);
@@ -8,6 +11,11 @@ if (!Object.getOwnPropertyDescriptors) {
 }
 
 var Class = {
+
+    //---------- Inheritance API
+
+    /**
+     */
     extend: function (properties) {
         var superProto = this.prototype || Class;
         var proto = Object.create(superProto);
@@ -19,10 +27,13 @@ var Class = {
         }
         // Set up the constructor
         constr.prototype = proto;
-        constr.__super__ = superProto;
+        constr.super = superProto;
         constr.extend = this.extend; // inherit class method
         return constr;
     },
+
+    /**
+     */
     copyOwnTo: function(source, target) {
         Object.getOwnPropertyNames(source).forEach(function(propName) {
             Object.defineProperty(target, propName,
@@ -30,6 +41,9 @@ var Class = {
         });
         return target;
     },
+
+    //---------- Various tool methods
+
     /**
      Find which object in the prototype chain starting at "obj"
      is the first to have a property whose name is "propName"
@@ -47,27 +61,3 @@ var Class = {
         return obj;
     },
 };
-
-////////// Demo //////////
-
-// Superclass
-var Person = Class.extend({
-    constructor: function (name) {
-        this.name = name;
-    },
-    describe: function() {
-        return "Person called "+this.name;
-    }
-});
-
-// Subclass
-var Worker = Person.extend({
-    constructor: function (name, title) {
-        Worker.__super__.constructor.call(this, name);
-        this.title = title;
-    },
-    describe: function () {
-        return Worker.__super__.describe.call(this)+" ("+this.title+")"; // (*)
-    }
-});
-var jane = new Worker("Jane", "CTO");
