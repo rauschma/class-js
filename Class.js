@@ -19,7 +19,9 @@ var Class = {
     extend: function (properties) {
         var superProto = this.prototype || Class;
         var proto = Object.create(superProto);
-        Class.copyOwnTo(properties, proto); // don't use this, it will change!
+        // This method will be attached to many constructor functions
+        // => must refer to "Class" via its global name (and not via "this")
+        Class.copyOwnTo(properties, proto);
         
         var constr = proto.constructor;
         if (!(constr instanceof Function)) {
