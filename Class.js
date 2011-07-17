@@ -53,7 +53,7 @@ var Class = {
      @url https://mail.mozilla.org/pipermail/es-discuss/2011-April/013643.html
      @return defining object or null
     */
-    getDefiningObject: function(obj, propName) {
+    getDefiningObject: function (obj, propName) {
         // TODO: exception if null
         obj = Object(obj); // make sure it’s an object
         while (obj && !obj.hasOwnProperty(propName)) {
@@ -61,5 +61,44 @@ var Class = {
             // obj is null if we have reached the end
         }
         return obj;
+    },
+    /**
+     */
+    getOwnProperty: function (obj, propName) {
+        if (Object.hasOwnProperty(obj, propName)) {
+            return obj[propName];
+        } else {
+            return undefined;
+        }
+    },
+    
+    /**
+     * Return an array with the names of all enumerable properties of obj
+     * (own and inherited properties)
+     */
+    allEnumerablePropertyNames: function (obj) {
+        var result = [];
+        for (var propName in obj) {
+            result.push(propName);
+        }
+        return result;
+    },
+
+    /**
+     * Return an array with the names of all properties of obj
+     * (own and inherited properties)
+     */
+    allPropertyNames: function (obj) {
+        if ((typeof obj) !== "object") { // null is not a problem
+            throw new Error("Only objects are allowed");
+        }
+        var props = {};
+        while(obj) {
+            Object.getOwnPropertyNames(obj).forEach(function(p) {
+                props[p] = true;
+            });
+            obj = Object.getPrototypeOf(obj);
+        }
+        return Object.getOwnPropertyNames(props);
     },
 };
