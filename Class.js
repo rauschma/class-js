@@ -1,14 +1,5 @@
-//---------- Preparing for ECMAScript.next
-
-if (!Object.getOwnPropertyDescriptors) {
-    /**
-     */
-    Object.getOwnPropertyDescriptors = function (obj) {
-        return Object.getOwnPropertyNames(obj).map(function(propName) {
-            return Object.getOwnPropertyDescriptor(source, propName);
-        });
-    };
-}
+// Dependency of this library:
+// ECMAScript 5: use the es5-shim in older browsers
 
 var Class = {
 
